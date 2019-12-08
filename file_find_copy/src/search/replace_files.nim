@@ -1,3 +1,5 @@
+import "path/vertical_walk" as walk
+
 import "../parse/cmd_replace"
 import "../parse/cmd_split"
 import "../parse/path_split"
@@ -18,7 +20,7 @@ proc replace*(srcPath: string, root: string, command: string) =
     #[
     ## 遍历目录
     ]#
-    for path in os.walkDirRec(root, yieldFilter={pcFile}):
+    proc fn(parent: string, name: string, path: string): walk.CbResult =
         var isContinue = true
         for src in srcs:
             # echo(fmt"{src}, {path}")
@@ -27,11 +29,11 @@ proc replace*(srcPath: string, root: string, command: string) =
                 isContinue = false
                 break
         if not isContinue:
-            continue
+            return walk.CbResult.Continue
         let (dir, findedName) = os.splitPath(path)
         # echo(fmt"first: {first}, findedName: {findedName}")
         if not srcNames.contains(findedName):
-            continue
+            return walk.CbResult.Continue
         #[
         ## 1. 切换目录
         ## 2. 执行命令
@@ -56,3 +58,5 @@ proc replace*(srcPath: string, root: string, command: string) =
             if s == findedName:
                 echo(fmt"copy: {d/s} => {path}")
                 os.copyFile(d/s, path)
+        result = walk.CbResult.Continue
+    walk.walk(root, fn)

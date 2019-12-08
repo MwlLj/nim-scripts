@@ -13,7 +13,7 @@ bin           = @["file_find_copy"]
 
 requires "nim >= 0.20.2"
 
-requires "https://github.com/MwlLj/nim-parse"
+requires "https://github.com/MwlLj/nim-parse#191e503"
 
 # import os
 task cr, "Testing `nimble c -r src/file_find_copy.nim` via setCommand":
