@@ -53,9 +53,9 @@ type
 type
     CExtraInfo = object
         originalPhotoUri: string
-        facePhotoUri: string
-        featureResult: CFeatureResult
-        size: int
+        # facePhotoUri: string
+        # featureResult: CFeatureResult
+        # size: int
 
 proc exec*(self: CExport): error.ErrorCode =
     #[
