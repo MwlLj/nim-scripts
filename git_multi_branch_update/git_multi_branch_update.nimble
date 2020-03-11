@@ -18,6 +18,7 @@ requires "https://github.com/MwlLj/nim-parse#191e503"
 import strformat
 task run, "Run":
     var target = "target"
+    let t = target
     var name = bin[0]
     mkdir target
     echo("build start")
@@ -32,8 +33,9 @@ task run, "Run":
         rmFile(name)
         when defined(linux):
             exec(fmt"chmod +x {target}")
+        cd t
         echo("***start exec***")
-        exec(fmt"{target} -dst .")
+        exec(fmt"{name} -dst dst -src src")
         echo("***exec end***")
     except:
         echo("unknow except")
