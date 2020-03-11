@@ -12,8 +12,10 @@ proc main() =
     var cmdHandler = go_style.newCmd()
     let src = cmdHandler.registerWithDesc("-src", "", "file path to be copied")
     let dst = cmdHandler.registerWithDesc("-dst", "", "update root path")
+    let filter = cmdHandler.registerWithDesc("-filter", "", "filter branch, use , split; example: alpha,v1.6")
+    let log = cmdHandler.registerWithDesc("-log", "update", "commit log info")
     cmdHandler.parse()
-    replace.replace(replace_param.newReplaceParam(src[], dst[]))
+    replace.replace(replace_param.newReplaceParam(src[], dst[], filter[], log[]))
 
 when isMainModule:
     main()

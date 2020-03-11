@@ -27,7 +27,7 @@ proc changeBackDst(curDir: string): bool =
         return false
     return true
 
-proc commit(dst: string, branch: string): bool =
+proc commit(dst: string, branch: string, log: string): bool =
     let r = changeDst(dst)
     if not r[1]:
         return false
@@ -35,11 +35,9 @@ proc commit(dst: string, branch: string): bool =
     code = osproc.execCmd("git add *")
     if code != 0:
         echo(fmt"exe git add error, code: {code}")
-        return false
-    code = osproc.execCmd("""git commit -m "update"""")
+    code = osproc.execCmd("""git commit -m "{log}"""")
     if code != 0:
         echo(fmt"exe git commit error, code: {code}")
-        return false
     code = osproc.execCmd(fmt"git push origin {branch}")
     if code != 0:
         echo(fmt"exe git push error, code: {code}")
@@ -49,7 +47,7 @@ proc commit(dst: string, branch: string): bool =
     return true
 
 proc replace*(param: replace_param.ReplaceParam) =
-    let branchs = git_branch.getGitBranchs(param.dst)
+    let branchs = git_branch.getGitBranchs(param.dst, param.filter)
     if branchs[1] == false:
         return
     let bs = branchs[0]
@@ -80,7 +78,7 @@ proc replace*(param: replace_param.ReplaceParam) =
         except OSError:
             echo(fmt"copy dir error, src: {param.src}, dst: {param.dst}")
         # 提交
-        discard commit(param.dst, b)
+        discard commit(param.dst, b, param.log)
     if bs.len() > 1:
         # 如果 bs.len() == 0 => 说明不需要切换回原来的分支
         # let code = osproc.execCmd(fmt"git checkout {curBranch}")

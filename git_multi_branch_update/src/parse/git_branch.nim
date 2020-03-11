@@ -15,7 +15,7 @@ proc deletePrefix(s: var string): bool =
     s.delete(0, last - 1)
     return isCur
 
-proc getGitBranchs*(path: string): tuple[bs: seq[tuple[isCur: bool, b: string]], ok: bool] =
+proc getGitBranchs*(path: string, filter: seq[string]): tuple[bs: seq[tuple[isCur: bool, b: string]], ok: bool] =
     var bs = newSeq[tuple[isCur: bool, b: string]]()
     var currentDir: string
     try:
@@ -36,6 +36,8 @@ proc getGitBranchs*(path: string): tuple[bs: seq[tuple[isCur: bool, b: string]],
         if branch.len() > 0:
             var b = string(branch)
             let isCur = b.deletePrefix()
+            if b in filter:
+                continue
             bs.add((isCur, b))
     try:
         os.setCurrentDir(currentDir)

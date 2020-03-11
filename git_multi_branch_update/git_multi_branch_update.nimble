@@ -35,8 +35,29 @@ task run, "Run":
             exec(fmt"chmod +x {target}")
         cd t
         echo("***start exec***")
-        exec(fmt"{name} -dst dst -src src")
+        exec(fmt"{name} -dst dst -src src -log update_test")
+        # exec(fmt"{name} -dst dst -src src -filter master")
         echo("***exec end***")
+    except:
+        echo("unknow except")
+
+task b, "Build":
+    var target = "target"
+    let t = target
+    var name = bin[0]
+    mkdir target
+    echo("build start")
+    exec "nimble build"
+    echo("build finish")
+    when defined(windows):
+        name.add(".exe")
+    target.add("/")
+    target.add(name)
+    try:
+        cpFile(name, target)
+        rmFile(name)
+        when defined(linux):
+            exec(fmt"chmod +x {target}")
     except:
         echo("unknow except")
 
