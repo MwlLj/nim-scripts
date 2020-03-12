@@ -36,6 +36,7 @@ proc getGitBranchs*(path: string, filter: seq[string], exclude: seq[string]): tu
         branchs = strutils.splitLines(r[0])
     else:
         branchs = filter
+    # echo(filter.len(), branchs, exclude)
     for branch in branchs:
         if branch.len() > 0:
             var b = string(branch)

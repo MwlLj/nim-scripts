@@ -9,4 +9,5 @@ proc split*(sc: char, command: string): seq[string] =
             world = ""
         else:
             world.add(c)
-    result.add(world)
+    if world.len() > 0:
+        result.add(world)
