@@ -35,7 +35,7 @@ proc commit(dst: string, branch: string, log: string): bool =
     code = osproc.execCmd("git add *")
     if code != 0:
         echo(fmt"exe git add error, code: {code}")
-    code = osproc.execCmd("""git commit -m "{log}"""")
+    code = osproc.execCmd(fmt"""git commit -m "{log}"""")
     if code != 0:
         echo(fmt"exe git commit error, code: {code}")
     code = osproc.execCmd(fmt"git push origin {branch}")
@@ -47,7 +47,7 @@ proc commit(dst: string, branch: string, log: string): bool =
     return true
 
 proc replace*(param: replace_param.ReplaceParam) =
-    let branchs = git_branch.getGitBranchs(param.dst, param.filter)
+    let branchs = git_branch.getGitBranchs(param.dst, param.filter, param.exclude)
     if branchs[1] == false:
         return
     let bs = branchs[0]

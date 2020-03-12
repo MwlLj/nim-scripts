@@ -15,7 +15,7 @@ proc deletePrefix(s: var string): bool =
     s.delete(0, last - 1)
     return isCur
 
-proc getGitBranchs*(path: string, filter: seq[string]): tuple[bs: seq[tuple[isCur: bool, b: string]], ok: bool] =
+proc getGitBranchs*(path: string, filter: seq[string], exclude: seq[string]): tuple[bs: seq[tuple[isCur: bool, b: string]], ok: bool] =
     var bs = newSeq[tuple[isCur: bool, b: string]]()
     var currentDir: string
     try:
@@ -31,12 +31,16 @@ proc getGitBranchs*(path: string, filter: seq[string]): tuple[bs: seq[tuple[isCu
     let r = osproc.execCmdEx("git branch")
     if r[1] != 0:
         return (bs, false)
-    let branchs = strutils.splitLines(r[0])
+    var branchs: seq[string]
+    if filter.len() == 0:
+        branchs = strutils.splitLines(r[0])
+    else:
+        branchs = filter
     for branch in branchs:
         if branch.len() > 0:
             var b = string(branch)
             let isCur = b.deletePrefix()
-            if b in filter:
+            if b in exclude:
                 continue
             bs.add((isCur, b))
     try:
