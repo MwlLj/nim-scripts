@@ -15,8 +15,9 @@ proc main() =
     let filter = cmdHandler.registerWithDesc("-filter", "", "filter branch, use , split; example: alpha,v1.6")
     let exclude = cmdHandler.registerWithDesc("-exclude", "", "exclude branch, use , split; example: alpha,v1.6")
     let log = cmdHandler.registerWithDesc("-log", "update", "commit log info")
+    let files = cmdHandler.registerWithDesc("-files", "*", "add / rm files, default *")
     cmdHandler.parse()
-    replace.replace(replace_param.newReplaceParam(src[], dst[], filter[], exclude[], log[]))
+    replace.replace(replace_param.newReplaceParam(src[], dst[], filter[], exclude[], log[], files[]))
 
 when isMainModule:
     main()

@@ -35,7 +35,7 @@ task run, "Run":
             exec(fmt"chmod +x {target}")
         cd t
         echo("***start exec***")
-        exec(fmt"{name} -dst dst -src src -filter master -exclude alpha,v1.7 -log update_test")
+        exec(fmt"{name} -dst dst -src src -filter master -exclude alpha,v1.7 -log update_test -files aa.txt,bb")
         # exec(fmt"{name} -dst dst -src src -filter master")
         echo("***exec end***")
     except:
