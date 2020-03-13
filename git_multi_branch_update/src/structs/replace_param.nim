@@ -1,5 +1,7 @@
 import "../parse/cmd_split"
 
+import strformat
+
 type
     ReplaceParam* = object
         src*: string
@@ -13,6 +15,7 @@ proc newReplaceParam*(src: string, dst: string, filter: string, exclude: string,
     let f = cmd_split.split(',', filter)
     let e = cmd_split.split(',', exclude)
     let fs = cmd_split.split(',', files)
+    # echo(fmt"{f}, {e}, {fs}")
     result = ReplaceParam(
         src: src,
         dst: dst,

@@ -32,13 +32,11 @@ proc commit(src: string, dst: string, branch: string, log: string, files: seq[st
 
 proc replace*(param: replace_param.ReplaceParam) =
     let branchs = git_branch.getGitBranchs(param.dst, param.filter, param.exclude)
-    if branchs[1] == false:
+    if branchs.ok == false:
         return
-    let bs = branchs[0]
-    var curBranch: string
-    for (isCur, b) in bs:
-        if isCur:
-            curBranch = b
+    let bs = branchs.bs
+    var curBranch = branchs.curBranch
+    for b in bs:
         let o = change.changeDir(param.dst)
         if not o[1]:
             continue
