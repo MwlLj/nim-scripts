@@ -30,6 +30,26 @@ proc commit(src: string, dst: string, branch: string, log: string, files: seq[st
         return false
     return true
 
+proc copy(src, dst: string): bool =
+    let fileInfo = os.getFileInfo(src)
+    case fileInfo.kind
+    of os.PathComponent.pcFile:
+        try:
+            let d = os.joinPath(dst, os.extractFilename(dst))
+            os.copyFile(src, d)
+        except OSError:
+            echo("copy file error")
+            return false
+    of os.PathComponent.pcDir:
+        try:
+            os.copyDir(src, dst)
+        except OSError:
+            echo("copy dir error")
+            return false
+    else:
+        discard
+    return true
+
 proc replace*(param: replace_param.ReplaceParam) =
     let branchs = git_branch.getGitBranchs(param.dst, param.filter, param.exclude)
     if branchs.ok == false:
@@ -55,10 +75,9 @@ proc replace*(param: replace_param.ReplaceParam) =
         if not change.changeBackDir(o[0]):
             continue
         # 拷贝文件
-        try:
-            os.copyDir(param.src, param.dst)
-        except OSError:
+        if not copy(param.src, param.dst):
             echo(fmt"copy dir error, src: {param.src}, dst: {param.dst}")
+            continue
         # 提交
         discard commit(param.src, param.dst, b, param.log, param.files)
     if bs.len() > 1:
