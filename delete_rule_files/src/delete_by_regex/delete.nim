@@ -11,7 +11,6 @@ proc delete*(root: string, match: string) =
     proc iter(parent: string, name: string, path: string): walk.CbResult =
         let (dir, parentName, ext) = os.splitFile(parent)
         if name.contains(re(fmt"{match}")):
-            echo(1111)
             os.removeFile(path)
         return walk.CbResult.Continue
     walk.walk(root, iter)

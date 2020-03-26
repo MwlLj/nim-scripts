@@ -5,7 +5,7 @@ import "cmd/go_style"
 
 proc main() =
     var cmdHandler = go_style.newCmd()
-    let mode = cmdHandler.registerWithDesc("-mode", "delete-arm-64-lib", "select feature")
+    let mode = cmdHandler.registerWithDesc("-mode", "delete-arm-64-lib / delete-by-regex", "select feature")
     let root = cmdHandler.registerWithDesc("-root", ".", "root")
     let match = cmdHandler.registerWithDesc("-match", "", "regex rule")
     cmdHandler.parse()
