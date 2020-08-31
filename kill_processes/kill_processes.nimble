@@ -13,8 +13,10 @@ bin           = @["kill_processes"]
 
 requires "nim >= 1.0.6"
 
+requires "https://github.com/MwlLj/nim-parse#191e503"
+
 task run, "run":
-  exec "nim c -r --outdir:target/run src/kill_processes.nim"
+  exec "nim c -r --outdir:target/run src/kill_processes.nim --name pgpool"
 
 task build, "build":
   exec "nim c -r -d:release --outdir:target/build/release src/kill_processes.nim"
